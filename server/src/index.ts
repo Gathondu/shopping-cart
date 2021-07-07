@@ -8,7 +8,7 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 
 /** SHOPPING CART IMPORTS */
-import schema from './Schema/index';
+import schema from './schema/index';
 
 // Initialize dotenv that helps with setting env variables
 dotenv.config();
