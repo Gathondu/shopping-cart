@@ -9,7 +9,6 @@ import dotenv from 'dotenv';
 
 /** SHOPPING CART IMPORTS */
 import schema from './schema';
-import entities from './entities';
 
 // Initialize dotenv that helps with setting env variables
 dotenv.config();
@@ -18,15 +17,7 @@ const port = process.env.PORT;
 
 const main = async () => {
   // Create the database connection via the typeorm orm
-  await createConnection({
-    type: 'mysql',
-    database: process.env.DATABASE_NAME,
-    username: process.env.DATABASE_USERNAME,
-    password: process.env.DATABASE_PASSWORD,
-    logging: true,
-    synchronize: true,
-    entities: entities,
-  });
+  await createConnection();
 
   const app = express(); // Initialize our express server
 
@@ -44,7 +35,7 @@ const main = async () => {
 
   // Start the express server
   app.listen(port, () => {
-    console.log(`running on port ${process.env.PORT}`);
+    console.log(`running on port ${port}`);
   });
 };
 
