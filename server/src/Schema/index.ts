@@ -11,11 +11,13 @@ import mutations from './mutations';
 
 const RootQuery = new GraphQLObjectType({
   name: 'RootQuery',
+  description: 'Root Query',
   fields: queries,
 });
 
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
+  description: 'Root Mutation',
   fields: mutations,
 });
 

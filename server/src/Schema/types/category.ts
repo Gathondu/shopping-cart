@@ -1,9 +1,4 @@
-import {
-  GraphQLObjectType,
-  GraphQLID,
-  GraphQLString,
-  GraphQLInt,
-} from 'graphql';
+import { GraphQLObjectType, GraphQLID, GraphQLString } from 'graphql';
 
 /** Define the category type object that we will consume in
  * graphQl queries and mutations. The category describes what
@@ -20,10 +15,11 @@ export type category = {
 
 export const CategoryType = new GraphQLObjectType({
   name: 'Category',
+  description: 'A category of products',
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
-    created_at: { type: GraphQLInt },
-    updated_at: { type: GraphQLInt },
+    created_at: { type: GraphQLString },
+    updated_at: { type: GraphQLString },
   }),
 });
