@@ -7,7 +7,7 @@ import { GraphQLObjectType, GraphQLSchema } from 'graphql';
 
 // Shopping Cart
 import queries from './queries';
-import mutations from "./mutations";
+import mutations from './mutations';
 
 const RootQuery = new GraphQLObjectType({
   name: 'RootQuery',

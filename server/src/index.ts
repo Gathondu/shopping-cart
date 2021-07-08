@@ -8,7 +8,7 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 
 /** SHOPPING CART IMPORTS */
-import schema from './schema/index';
+import schema from './schema';
 
 // Initialize dotenv that helps with setting env variables
 dotenv.config();
@@ -33,10 +33,13 @@ const main = async () => {
   app.use(cors());
   app.use(express.json());
   app.use(morgan('dev'));
-  app.use('/graphql', graphqlHTTP({
-    schema,
-    graphiql: true,
-  }));
+  app.use(
+    '/graphql',
+    graphqlHTTP({
+      schema,
+      graphiql: true,
+    }),
+  );
 
   // Start the express server
   app.listen(port, () => {

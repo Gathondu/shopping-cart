@@ -2,14 +2,14 @@
  * to create update and delete a category
  */
 // Vendor
-import { GraphQLString } from "graphql";
+import { GraphQLString } from 'graphql';
 
 // Shopping Cart
-import CategoryType from "../types/category";
+import CategoryType from '../types/category';
 
 type category = {
-  name: string
-}
+  name: string;
+};
 
 export const CREATE_CATEGORY = {
   type: CategoryType,
@@ -17,7 +17,7 @@ export const CREATE_CATEGORY = {
     name: { type: GraphQLString },
   },
   resolve(parent: category, args: any): string {
-    const { name } = args
-    return name
-  }
-}
+    const { name } = args;
+    return name;
+  },
+};
