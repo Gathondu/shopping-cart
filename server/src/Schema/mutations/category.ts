@@ -5,19 +5,16 @@
 import { GraphQLString } from 'graphql';
 
 // Shopping Cart
-import CategoryType from '../types/category';
-
-type category = {
-  name: string;
-};
+import { Categories } from '../../entities/categories';
+import { CategoryType, category } from '../types/category';
 
 export const CREATE_CATEGORY = {
   type: CategoryType,
   args: {
     name: { type: GraphQLString },
   },
-  resolve(parent: category, args: any): string {
-    const { name } = args;
-    return name;
+  async resolve(parent: category, args: any): Promise<string> {
+    await Categories.insert(args);
+    return `Successfully created category ${args.name}`;
   },
 };
