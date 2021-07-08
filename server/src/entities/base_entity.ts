@@ -1,13 +1,11 @@
 import {
   BaseEntity,
   CreateDateColumn,
-  Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   VersionColumn,
 } from 'typeorm';
 
-@Entity()
 export default abstract class BaseCollection extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
