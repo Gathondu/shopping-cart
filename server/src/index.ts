@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 
 /** SHOPPING CART IMPORTS */
 import schema from './schema';
+import entities from './entities';
 
 // Initialize dotenv that helps with setting env variables
 dotenv.config();
@@ -23,8 +24,8 @@ const main = async () => {
     username: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
     logging: true,
-    synchronize: false,
-    entities: [],
+    synchronize: true,
+    entities: entities,
   });
 
   const app = express(); // Initialize our express server
