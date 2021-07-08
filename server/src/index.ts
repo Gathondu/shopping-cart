@@ -17,6 +17,7 @@ const port = process.env.PORT;
 
 const main = async () => {
   // Create the database connection via the typeorm orm
+  // configurations are in the ormconfig
   await createConnection();
 
   const app = express(); // Initialize our express server

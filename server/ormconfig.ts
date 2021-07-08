@@ -23,8 +23,8 @@ const config: ConnectionOptions = {
   port: Number(DATABASE_PORT),
   logging: NODE_ENV === 'production' ? false : true,
   synchronize: NODE_ENV === 'production' ? false : true,
-  entities: [`${dir}/entities/*.ts`],
-  migrations: [`${dir}/migration/*.ts`],
+  entities: [`${dir}/entities/*{.ts,.js}`],
+  migrations: [`${dir}/migration/*{.ts,.js}`],
   cli: {
     migrationsDir: `${dir}/migration`,
   },
