@@ -3,7 +3,6 @@
  */
 // Vendor
 import { GraphQLID, GraphQLString } from 'graphql';
-import { resolve } from 'path/posix';
 
 // Shopping Cart
 import { Categories } from '../../entities/categories';
@@ -14,9 +13,11 @@ export const CREATE_CATEGORY = {
   args: {
     name: { type: GraphQLString },
   },
-  async resolve(parent: category, args: any): Promise<any> {
+  async resolve(parent: category, args: any): Promise<Categories> {
     const { name } = args;
-    return await Categories.insert({ name });
+    const cat = Categories.create({ name });
+    await cat.save();
+    return cat;
   },
 };
 
@@ -32,5 +33,18 @@ export const UPDATE_CATEGORY = {
     cat.name = name;
     cat.save();
     return cat;
+  },
+};
+
+export const DELETE_CATEGORY = {
+  type: CategoryType,
+  args: {
+    id: { type: GraphQLID },
+  },
+  async resolve(parent: category, args: any): Promise<string> {
+    const { id } = args;
+    const cat = await Categories.findOneOrFail({ id });
+    cat.remove();
+    return 'record deleted';
   },
 };
