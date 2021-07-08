@@ -12,6 +12,8 @@ const {
   NODE_ENV,
 } = process.env;
 
+const dir = NODE_ENV === 'production' ? 'dist' : 'src';
+
 const config: ConnectionOptions = {
   type: 'mysql',
   database: DATABASE_NAME,
@@ -21,11 +23,11 @@ const config: ConnectionOptions = {
   port: Number(DATABASE_PORT),
   logging: NODE_ENV === 'production' ? false : true,
   synchronize: NODE_ENV === 'production' ? false : true,
-  entities: ['dist/entities/*.js'],
-  migrations: ['src/migration/*.ts'],
+  entities: [`${dir}/entities/*.ts`],
+  migrations: [`${dir}/migration/*.ts`],
   cli: {
-    migrationsDir: 'src/migration',
+    migrationsDir: `${dir}/migration`,
   },
 };
 
-export = config;
+export default config;

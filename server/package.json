@@ -11,8 +11,10 @@
     "start": "node ./dist/index.js",
     "dev": "nodemon ./src/index.ts",
     "build": "tsc -p .",
-    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
-    "migrate": "typeorm migration:run"
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js -f ./ormconfig.ts",
+    "migrate": "typeorm -- migration:run",
+    "revert": "typeorm -- migration:revert",
+    "clear-cache": "typeorm -- cache:clear"
   },
   "dependencies": {
     "@types/cors": "^2.8.11",
@@ -26,6 +28,7 @@
     "graphql": "^15.5.1",
     "morgan": "^1.10.0",
     "mysql2": "^2.2.5",
+    "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.34"
   },
   "devDependencies": {
