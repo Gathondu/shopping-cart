@@ -11,10 +11,7 @@
     "start": "node ./dist/index.js",
     "dev": "nodemon ./src/index.ts",
     "build": "tsc -p .",
-    "typeorm": "ts-node ./node_modules/typeorm/cli.js -f ./ormconfig.ts",
-    "migrate": "typeorm -- migration:run",
-    "revert": "typeorm -- migration:revert",
-    "clear-cache": "typeorm -- cache:clear"
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js -f ./ormconfig.ts"
   },
   "dependencies": {
     "@types/cors": "^2.8.11",
