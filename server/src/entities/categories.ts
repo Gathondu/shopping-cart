@@ -2,13 +2,10 @@
  * table in the database via migration files.
  */
 
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column } from 'typeorm';
+import BaseCollection from './base_entity';
 
-@Entity()
-export class Categories extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Column()
+export class Categories extends BaseCollection {
+  @Column({ type: 'varchar', unique: true, length: 20 })
   name!: string;
 }
