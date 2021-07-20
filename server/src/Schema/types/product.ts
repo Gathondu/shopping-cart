@@ -18,10 +18,10 @@ export type product = {
   sku: string;
   price: number;
   stock_level: number;
-  expiry_date: string;
+  expiry_date: Date;
   category_id: number;
-  created_at: string;
-  updated_at: string;
+  created_at: Date;
+  updated_at: Date;
 };
 
 export const ProductType = new GraphQLObjectType({

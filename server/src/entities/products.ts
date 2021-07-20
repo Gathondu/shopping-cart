@@ -21,10 +21,9 @@ export class Products extends BaseCollection {
   stock_level!: number;
 
   @Column({
-    type: 'timestamp',
     nullable: true,
   })
-  expiry_date!: string;
+  expiry_date!: Date;
 
   @ManyToOne(() => Categories, (category) => category.products)
   category!: Categories;
