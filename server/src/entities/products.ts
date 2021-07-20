@@ -25,6 +25,8 @@ export class Products extends BaseCollection {
   })
   expiry_date!: Date;
 
-  @ManyToOne(() => Categories, (category) => category.products)
+  @ManyToOne(() => Categories, (category) => category.products, {
+    nullable: false,
+  })
   category!: Categories;
 }
