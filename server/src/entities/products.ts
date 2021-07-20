@@ -14,7 +14,7 @@ export class Products extends BaseCollection {
   @Column({ type: 'varchar', unique: true, length: 100 })
   sku!: string;
 
-  @Column()
+  @Column({ type: 'float' })
   price!: number;
 
   @Column()

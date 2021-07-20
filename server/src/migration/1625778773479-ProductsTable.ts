@@ -7,7 +7,7 @@ export class ProductsTable1625778773479 implements MigrationInterface {
         data_version int NOT NULL,
         name varchar(50) NOT NULL,
         sku varchar(100) NOT NULL,
-        price int NOT NULL,
+        price float NOT NULL,
         stock_level int NOT NULL,
         expiry_date timestamp NULL DEFAULT NULL,
         created_at timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
