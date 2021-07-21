@@ -3,7 +3,6 @@ import {
   GraphQLID,
   GraphQLString,
   GraphQLInt,
-  GraphQLFloat,
 } from 'graphql';
 import { Categories } from '../../entities/categories';
 import { DateType } from '../scalars';
