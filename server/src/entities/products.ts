@@ -27,7 +27,8 @@ export class Products extends BaseCollection {
 
   @ManyToOne(() => Categories, (category) => category.products, {
     nullable: false,
-    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   category!: Categories;
 }
