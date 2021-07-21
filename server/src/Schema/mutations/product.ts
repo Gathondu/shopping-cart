@@ -50,7 +50,7 @@ export const UPDATE_PRODUCT = {
     const { id } = args;
     delete args.id;
     await getManager().update(Products, id, args);
-    return await getManager().findOne(Products, id, {
+    return await getManager().findOneOrFail(Products, id, {
       relations: ['category'],
     });
   },

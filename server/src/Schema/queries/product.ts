@@ -21,7 +21,7 @@ export const GET_PRODUCT = {
   },
   async resolve(parent: product, args: any): Promise<Products | undefined> {
     const { id } = args;
-    return await getManager().findOne(Products, id, {
+    return await getManager().findOneOrFail(Products, id, {
       relations: ['category'],
     });
   },
