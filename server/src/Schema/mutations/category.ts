@@ -3,6 +3,7 @@
  */
 // Vendor
 import { GraphQLID, GraphQLString } from 'graphql';
+import { getManager } from 'typeorm';
 
 // Shopping Cart
 import { Categories } from '../../entities/categories';
@@ -13,11 +14,9 @@ export const CREATE_CATEGORY = {
   args: {
     name: { type: GraphQLString },
   },
-  async resolve(parent: category, args: any): Promise<Categories> {
-    const { name } = args;
+  async resolve(parent: category, { name }: any): Promise<Categories> {
     const cat = Categories.create({ name });
-    await cat.save();
-    return cat;
+    return await getManager().save(cat);
   },
 };
 
@@ -27,12 +26,14 @@ export const UPDATE_CATEGORY = {
     id: { type: GraphQLID },
     name: { type: GraphQLString },
   },
-  async resolve(parent: category, args: any): Promise<Categories> {
-    const { id, name } = args;
-    const cat = await Categories.findOneOrFail({ id });
-    cat.name = name;
-    cat.save();
-    return cat;
+  async resolve(
+    parent: category,
+    { id, name }: any,
+  ): Promise<Categories | undefined> {
+    await getManager().update(Categories, id, { name });
+    return await getManager().findOneOrFail(Categories, id, {
+      relations: ['products'],
+    });
   },
 };
 
@@ -41,10 +42,8 @@ export const DELETE_CATEGORY = {
   args: {
     id: { type: GraphQLID },
   },
-  async resolve(parent: category, args: any): Promise<string> {
-    const { id } = args;
-    const cat = await Categories.findOneOrFail({ id });
-    cat.remove();
-    return 'record deleted';
+  async resolve(parent: category, { id }: any): Promise<void> {
+    await getManager().delete(Categories, id);
+    return;
   },
 };
