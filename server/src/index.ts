@@ -15,31 +15,30 @@ dotenv.config();
 
 const port = process.env.PORT;
 
-const main = async () => {
-  // Create the database connection via the typeorm orm
-  // configurations are in the ormconfig
-  await createConnection();
+// Create the database connection via the typeorm orm
+// configurations are in the ormconfig
 
-  const app = express(); // Initialize our express server
+createConnection()
+  .then(async () => {
+    const app = express(); // Initialize our express server
 
-  // MIDDLEWARES
-  app.use(cors());
-  app.use(express.json());
-  app.use(morgan('dev'));
-  app.use(
-    '/graphql',
-    graphqlHTTP({
-      schema,
-      graphiql: true,
-    }),
-  );
+    // MIDDLEWARES
+    app.use(cors());
+    app.use(express.json());
+    app.use(morgan('dev'));
+    app.use(
+      '/graphql',
+      graphqlHTTP({
+        schema,
+        graphiql: true,
+      }),
+    );
 
-  // Start the express server
-  app.listen(port, () => {
-    console.log(`running on port ${port}`);
+    // Start the express server
+    app.listen(port, () => {
+      console.log(`running on port ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
   });
-};
-
-main().catch((err) => {
-  console.log(err);
-});
