@@ -2,35 +2,36 @@
  * to create update and delete a product
  */
 // Vendor
-import { GraphQLFloat, GraphQLID, GraphQLInt, GraphQLString } from 'graphql';
-import { Categories } from '../../entities/categories';
+import { GraphQLID, GraphQLInt, GraphQLString } from 'graphql';
+import { getManager } from 'typeorm';
 
 // Shopping Cart
 import { Products } from '../../entities/products';
 import { product, ProductType } from '../types/product';
+import { DateType } from '../scalars';
 
 export const CREATE_PRODUCT = {
   type: ProductType,
   args: {
     name: { type: GraphQLString },
     sku: { type: GraphQLString },
-    price: { type: GraphQLFloat },
+    price: { type: GraphQLString },
     stock_level: { type: GraphQLInt },
-    expiry_date: { type: GraphQLString },
+    expiry_date: { type: DateType },
     category_id: { type: GraphQLInt },
   },
-  async resolve(parent: product, args: any): Promise<Products> {
-    const { name, sku, price, stock_level, expiry_date, category_id } = args;
-    const prod = Products.create({
-      name,
-      sku,
-      price,
-      stock_level,
-      expiry_date,
-    });
-    prod.category = await Categories.findOneOrFail({ id: category_id });
-    await prod.save();
-    return prod;
+  async resolve(
+    parent: product,
+    { name, sku, price, stock_level, expiry_date, category_id }: any,
+  ): Promise<Products> {
+    const prod = new Products();
+    prod.name = name;
+    prod.sku = sku;
+    prod.price = price;
+    prod.stock_level = stock_level;
+    prod.expiry_date = expiry_date;
+    prod.category = <any>{ id: category_id };
+    return await getManager().save(prod);
   },
 };
 
@@ -40,24 +41,18 @@ export const UPDATE_PRODUCT = {
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     sku: { type: GraphQLString },
-    price: { type: GraphQLInt },
+    price: { type: GraphQLString },
     stock_level: { type: GraphQLInt },
-    expiry_date: { type: GraphQLString },
+    expiry_date: { type: DateType },
     category_id: { type: GraphQLInt },
   },
-  async resolve(parent: product, args: any): Promise<Products> {
-    const { id, name, sku, price, stock_level, expiry_date, category_id } =
-      args;
-    const prod = await Products.findOneOrFail({ id });
-    const cat = await Categories.findOne({ id: category_id });
-    prod.name = name;
-    prod.sku = sku;
-    prod.price = price;
-    prod.stock_level = stock_level;
-    prod.expiry_date = expiry_date;
-    prod.save();
-    cat?.products.push(prod);
-    return prod;
+  async resolve(parent: product, args: any): Promise<Products | undefined> {
+    const { id } = args;
+    delete args.id;
+    await getManager().update(Products, id, args);
+    return await getManager().findOne(Products, id, {
+      relations: ['category'],
+    });
   },
 };
 
@@ -66,10 +61,8 @@ export const DELETE_PRODUCT = {
   args: {
     id: { type: GraphQLID },
   },
-  async resolve(parent: product, args: any): Promise<string> {
-    const { id } = args;
-    const prod = await Products.findOneOrFail({ id });
-    prod.remove();
-    return 'record deleted';
+  async resolve(parent: product, { id }: any): Promise<void> {
+    await getManager().delete(Products, id);
+    return;
   },
 };

@@ -3,16 +3,11 @@
  */
 
 import { GET_ALL_CATEGORIES, GET_CATEGORY } from './category';
-import {
-  GET_ALL_PRODUCTS,
-  GET_PRODUCT,
-  GET_PRODUCTS_FROM_CATEGORY,
-} from './product';
+import { GET_ALL_PRODUCTS, GET_PRODUCT } from './product';
 
 export default {
   getAllCategories: GET_ALL_CATEGORIES,
   getCategory: GET_CATEGORY,
   getAllProducts: GET_ALL_PRODUCTS,
   getProduct: GET_PRODUCT,
-  getProductsFromCategory: GET_PRODUCTS_FROM_CATEGORY,
 };
