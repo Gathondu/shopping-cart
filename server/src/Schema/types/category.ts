@@ -10,8 +10,8 @@ import { DateType } from '../scalars';
 export type category = {
   id: number;
   name: string;
-  created_at: Date;
-  updated_at: Date;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export const CategoryType = new GraphQLObjectType({
@@ -20,7 +20,7 @@ export const CategoryType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
-    created_at: { type: DateType },
-    updated_at: { type: DateType },
+    createdAt: { type: DateType },
+    updatedAt: { type: DateType },
   }),
 });

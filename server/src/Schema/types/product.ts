@@ -18,11 +18,11 @@ export type product = {
   name: string;
   sku: string;
   price: string;
-  stock_level: number;
-  expiry_date: Date;
+  stockLevel: number;
+  expiryDate: Date;
   category: Categories;
-  created_at: Date;
-  updated_at: Date;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export const ProductType = new GraphQLObjectType({
@@ -33,10 +33,10 @@ export const ProductType = new GraphQLObjectType({
     name: { type: GraphQLString },
     sku: { type: GraphQLString },
     price: { type: GraphQLString },
-    stock_level: { type: GraphQLInt },
-    expiry_date: { type: DateType },
+    stockLevel: { type: GraphQLInt },
+    expiryDate: { type: DateType },
     category: { type: CategoryType },
-    created_at: { type: DateType },
-    updated_at: { type: DateType },
+    createdAt: { type: DateType },
+    updatedAt: { type: DateType },
   }),
 });

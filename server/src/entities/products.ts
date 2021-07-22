@@ -17,13 +17,14 @@ export class Products extends BaseCollection {
   @Column({ type: 'float' })
   price!: number;
 
-  @Column()
-  stock_level!: number;
+  @Column({ name: 'stock_level' })
+  stockLevel!: number;
 
   @Column({
     nullable: true,
+    name: 'expiry_date',
   })
-  expiry_date!: Date;
+  expiryDate!: Date;
 
   @ManyToOne(() => Categories, (category) => category.products, {
     nullable: false,

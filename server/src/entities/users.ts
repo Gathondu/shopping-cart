@@ -8,11 +8,11 @@ import { Carts } from './carts';
 
 @Entity()
 export class Users extends BaseCollection {
-  @Column({ type: 'varchar', length: 20 })
-  first_name!: string;
+  @Column({ type: 'varchar', length: 20, name: 'first_name' })
+  firstName!: string;
 
-  @Column({ type: 'varchar', length: 20 })
-  last_name!: string;
+  @Column({ type: 'varchar', length: 20, name: 'last_name' })
+  lastName!: string;
 
   @OneToOne(() => Carts, {
     onDelete: 'CASCADE',

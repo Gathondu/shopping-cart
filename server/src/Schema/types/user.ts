@@ -1,14 +1,17 @@
 import { GraphQLObjectType, GraphQLID, GraphQLString } from 'graphql';
+import { Carts } from '../../entities/carts';
 import { DateType } from '../scalars';
+import { CartType } from './cart';
 
 // Define the user type object
 // define a user type for typescript
 export type user = {
   id: number;
-  first_name: string;
-  last_name: string;
-  created_at: Date;
-  updated_at: Date;
+  firstName: string;
+  lastName: string;
+  cart: Carts;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export const UserType = new GraphQLObjectType({
@@ -16,9 +19,10 @@ export const UserType = new GraphQLObjectType({
   description: 'A user',
   fields: () => ({
     id: { type: GraphQLID },
-    first_name: { type: GraphQLString },
-    last_name: { type: GraphQLString },
-    created_at: { type: DateType },
-    updated_at: { type: DateType },
+    firstName: { type: GraphQLString },
+    lastName: { type: GraphQLString },
+    Carts: { type: CartType },
+    createdAt: { type: DateType },
+    updatedAt: { type: DateType },
   }),
 });
