@@ -7,7 +7,6 @@ export class AddCartEntity1626880761876 implements MigrationInterface {
       created_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
       updated_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
       data_version int NOT NULL,
-      products json NOT NULL,
       PRIMARY KEY (id)
       )`);
   }
