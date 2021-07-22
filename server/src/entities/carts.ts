@@ -2,11 +2,12 @@
  * table in the database via migration files.
  */
 
-import { Column, Entity } from 'typeorm';
+import { Entity, OneToMany } from 'typeorm';
 import BaseCollection from './base_entity';
+import { CartItems } from './cart_items';
 
 @Entity()
 export class Carts extends BaseCollection {
-  @Column({ type: 'json' })
-  products!: { item: number; product_id: number; count: number };
+  @OneToMany(() => CartItems, (item) => item.cart)
+  items!: CartItems[];
 }
