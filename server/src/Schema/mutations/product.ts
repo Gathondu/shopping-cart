@@ -16,21 +16,21 @@ export const CREATE_PRODUCT = {
     name: { type: GraphQLString },
     sku: { type: GraphQLString },
     price: { type: GraphQLString },
-    stock_level: { type: GraphQLInt },
-    expiry_date: { type: DateType },
-    category_id: { type: GraphQLInt },
+    stockLevel: { type: GraphQLInt },
+    expiryDate: { type: DateType },
+    categoryId: { type: GraphQLInt },
   },
   async resolve(
     parent: product,
-    { name, sku, price, stock_level, expiry_date, category_id }: any,
+    { name, sku, price, stockLevel, expiryDate, categoryId }: any,
   ): Promise<Products> {
     const prod = new Products();
     prod.name = name;
     prod.sku = sku;
     prod.price = price;
-    prod.stock_level = stock_level;
-    prod.expiry_date = expiry_date;
-    prod.category = <any>{ id: category_id };
+    prod.stockLevel = stockLevel;
+    prod.expiryDate = expiryDate;
+    prod.category = <any>{ id: categoryId };
     return await getManager().save(prod);
   },
 };
@@ -42,9 +42,9 @@ export const UPDATE_PRODUCT = {
     name: { type: GraphQLString },
     sku: { type: GraphQLString },
     price: { type: GraphQLString },
-    stock_level: { type: GraphQLInt },
-    expiry_date: { type: DateType },
-    category_id: { type: GraphQLInt },
+    stockLevel: { type: GraphQLInt },
+    expiryDate: { type: DateType },
+    categoryId: { type: GraphQLInt },
   },
   async resolve(parent: product, args: any): Promise<Products | undefined> {
     const { id } = args;
