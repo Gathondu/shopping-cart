@@ -7,16 +7,18 @@ import {
   DELETE_CART,
   DELETE_ITEM_FROM_CART,
 } from './cart';
-// import { CREATE_USER } from './user';
+import { CREATE_USER, UPDATE_USER, DELETE_USER } from './user';
 
 const createMutations = {
   createCategory: CREATE_CATEGORY,
   createProduct: CREATE_PRODUCT,
+  createUser: CREATE_USER,
 };
 
 const updateMutations = {
   updateCategory: UPDATE_CATEGORY,
   updateProduct: UPDATE_PRODUCT,
+  updateUser: UPDATE_USER,
   addItemToCart: ADD_TO_CART,
   removeFromCart: REMOVE_FROM_CART,
 };
@@ -26,6 +28,7 @@ const deleteMutations = {
   deleteProduct: DELETE_PRODUCT,
   deleteCart: DELETE_CART,
   deleteItemFromCart: DELETE_ITEM_FROM_CART,
+  deleteUser: DELETE_USER,
 };
 
 export default {
