@@ -17,12 +17,14 @@ const manageCart = async (
   const add = operation === 'add';
   const shoppingCart = await getManager().findOneOrFail(Carts, id);
   const prod = await getManager().findOneOrFail(Products, productId);
-  const cartProd = shoppingCart.items.find((x) => x.productId === productId);
+  const cartProd = shoppingCart.items?.find((x) => x.productId === productId);
   if (!add && cartProd?.count == 1) {
     // never allow item count below 1. To remove the item entirely use DELETE_ITEM_FROM_CART
     return shoppingCart;
   }
-  if (cartProd) {
+  if (cartProd && count) {
+    add ? (cartProd.count += count) : (cartProd.count -= count);
+  } else if (cartProd) {
     add ? cartProd.count++ : cartProd.count--; // this is used from the shopping cart to adjust by 1
   } else {
     // ideally we should never get here if we are removing an item from cart
@@ -32,10 +34,12 @@ const manageCart = async (
     cartItem.count = count ? count : 1; // set from products and can add many to cart
     cartItem.save();
   }
-  if (prod) {
-    add ? prod.stockLevel-- : prod.stockLevel++; // adjust the product stock level
-    getManager().save(prod);
+  if (prod && count) {
+    add ? (prod.stockLevel -= count) : (prod.stockLevel += count); // adjust the product stock level
+  } else if (prod) {
+    add ? prod.stockLevel-- : prod.stockLevel++;
   }
+  getManager().save(prod);
   await getManager().save(shoppingCart);
   return shoppingCart;
 };
