@@ -8,6 +8,7 @@ import {
   GET_CATEGORY_PRODUCTS,
 } from './category';
 import { GET_ALL_PRODUCTS, GET_PRODUCT } from './product';
+import { GET_USER_CART } from './cart';
 
 export default {
   getAllCategories: GET_ALL_CATEGORIES,
@@ -15,4 +16,5 @@ export default {
   getCategoryProducts: GET_CATEGORY_PRODUCTS,
   getAllProducts: GET_ALL_PRODUCTS,
   getProduct: GET_PRODUCT,
+  getCart: GET_USER_CART,
 };
