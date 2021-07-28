@@ -1,5 +1,12 @@
-import { GraphQLObjectType, GraphQLID, GraphQLString } from 'graphql';
+import {
+  GraphQLObjectType,
+  GraphQLID,
+  GraphQLString,
+  GraphQLList,
+} from 'graphql';
+import { Products } from '../../entities/products';
 import { DateType } from '../scalars';
+import { ProductType } from './product';
 
 /** Define the category type object that we will consume in
  * graphQl queries and mutations. The category describes what
@@ -10,6 +17,7 @@ import { DateType } from '../scalars';
 export type category = {
   id: number;
   name: string;
+  products: Products;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -20,6 +28,7 @@ export const CategoryType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
+    products: { type: new GraphQLList(ProductType) },
     createdAt: { type: DateType },
     updatedAt: { type: DateType },
   }),
