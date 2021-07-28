@@ -1,5 +1,6 @@
-import { GraphQLObjectType, GraphQLID } from 'graphql';
+import { GraphQLObjectType, GraphQLID, GraphQLList } from 'graphql';
 import { DateType } from '../scalars';
+import { ItemType } from './cart_item';
 
 // Define the cart type object
 // define a cart type for typescript
@@ -14,6 +15,7 @@ export const CartType = new GraphQLObjectType({
   description: 'A cart',
   fields: () => ({
     id: { type: GraphQLID },
+    items: { type: new GraphQLList(ItemType) },
     createdAt: { type: DateType },
     updatedAt: { type: DateType },
   }),
