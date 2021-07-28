@@ -10,7 +10,7 @@ import { Products } from '../../entities/products';
 export const GET_ALL_PRODUCTS = {
   type: new GraphQLList(ProductType),
   async resolve(): Promise<Products[]> {
-    return await getManager().find(Products, { relations: ['category'] });
+    return await getManager().find(Products);
   },
 };
 
@@ -21,8 +21,6 @@ export const GET_PRODUCT = {
   },
   async resolve(parent: product, args: any): Promise<Products | undefined> {
     const { id } = args;
-    return await getManager().findOneOrFail(Products, id, {
-      relations: ['category'],
-    });
+    return await getManager().findOneOrFail(Products, id);
   },
 };
