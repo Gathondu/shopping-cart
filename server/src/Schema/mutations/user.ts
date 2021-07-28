@@ -17,10 +17,13 @@ export const CREATE_USER = {
     lastName: { type: GraphQLString },
   },
   async resolve(parent: user, { firstName, lastName }: any): Promise<Users> {
+    const cart = getManager().create(Carts);
+    await getManager().save(cart);
     const usr = new Users();
     usr.firstName = firstName;
     usr.lastName = lastName;
-    usr.cart = new Carts();
+    usr.cart = cart;
+    usr.cartId = cart.id;
     return await getManager().save(usr);
   },
 };

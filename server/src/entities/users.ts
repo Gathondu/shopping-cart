@@ -14,11 +14,15 @@ export class Users extends BaseCollection {
   @Column({ type: 'varchar', length: 20, name: 'last_name' })
   lastName!: string;
 
+  @Column('int')
+  cartId!: number;
+
   @OneToOne(() => Carts, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
     cascade: true,
+    nullable: false,
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'cart' })
   cart!: Carts;
 }
