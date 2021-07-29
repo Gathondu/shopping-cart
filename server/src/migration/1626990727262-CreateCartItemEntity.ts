@@ -2,7 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateCartItemEntity1626990727262 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    queryRunner.query(`CREATE TABLE IF NOT EXIST cart_items (
+    queryRunner.query(`CREATE TABLE IF NOT EXISTS cart_items (
   id int NOT NULL AUTO_INCREMENT,
   created_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   updated_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
