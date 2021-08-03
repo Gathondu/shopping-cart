@@ -1,17 +1,21 @@
 /* eslint-disable no-console */
 /** VENDOR IMPORTS */
+import 'reflect-metadata';
 import express from 'express';
 import { graphqlHTTP } from 'express-graphql';
 import cors from 'cors';
 import { createConnection } from 'typeorm';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import path from 'path';
 
 /** SHOPPING CART IMPORTS */
 import schema from './schema';
 
 // Initialize dotenv that helps with setting env variables
-dotenv.config();
+dotenv.config({
+  path: path.resolve(__dirname, `../.env.${process.env.NODE_ENV}`),
+});
 
 const port = process.env.PORT;
 
