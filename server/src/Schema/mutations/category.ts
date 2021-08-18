@@ -42,8 +42,9 @@ export const DELETE_CATEGORY = {
   args: {
     id: { type: GraphQLID },
   },
-  async resolve(parent: category, { id }: any): Promise<void> {
+  async resolve(parent: category, { id }: any): Promise<Categories> {
+    const category = await getManager().findOneOrFail(Categories, id);
     await getManager().delete(Categories, id);
-    return;
+    return category;
   },
 };

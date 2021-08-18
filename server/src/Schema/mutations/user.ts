@@ -35,8 +35,10 @@ export const UPDATE_USER = {
     firstName: { type: GraphQLString },
     lastName: { type: GraphQLString },
   },
-  async resolve(parent: user, args: any): Promise<Users> {
-    const { id, firstName, lastName } = args;
+  async resolve(
+    parent: user,
+    { id, firstName, lastName }: any,
+  ): Promise<Users> {
     await getManager().update(Users, id, { firstName, lastName });
     return await getManager().findOneOrFail(Users, id);
   },
@@ -47,8 +49,9 @@ export const DELETE_USER = {
   args: {
     id: { type: GraphQLID },
   },
-  async resolve(parent: user, { id }: any): Promise<void> {
+  async resolve(parent: user, { id }: any): Promise<Users> {
+    const user = await getManager().findOneOrFail(Users, id);
     await getManager().delete(Users, id);
-    return;
+    return user;
   },
 };

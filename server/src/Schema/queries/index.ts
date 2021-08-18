@@ -8,11 +8,11 @@ import { GET_USER_CART } from './cart';
 import { GET_ALL_USERS, GET_USER } from './user';
 
 export default {
-  getAllCategories: GET_ALL_CATEGORIES,
-  getCategory: GET_CATEGORY,
-  getAllProducts: GET_ALL_PRODUCTS,
-  getProduct: GET_PRODUCT,
-  getCart: GET_USER_CART,
-  getAllUsers: GET_ALL_USERS,
-  getUser: GET_USER,
+  categories: GET_ALL_CATEGORIES,
+  category: GET_CATEGORY,
+  products: GET_ALL_PRODUCTS,
+  product: GET_PRODUCT,
+  cart: GET_USER_CART,
+  users: GET_ALL_USERS,
+  user: GET_USER,
 };
