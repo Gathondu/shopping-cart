@@ -1,6 +1,8 @@
 import { gql, GraphQLClient } from 'graphql-request';
 import { createConnection, getConnection } from 'typeorm';
 import { Categories } from '../entities/categories';
+import { Products } from '../entities/products';
+import { createProduct } from './utils/factory';
 
 describe('CATEGORY INTERACTIONS', () => {
   let client: GraphQLClient;
@@ -76,8 +78,9 @@ describe('CATEGORY INTERACTIONS', () => {
       expect(response.categories).toHaveLength(4);
     });
 
-    test('one category', async () => {
-      const category = await Categories.findOne(2);
+    test('a category and its products', async () => {
+      await createProduct(2);
+      const category = await Categories.findOne(2, { relations: ['products'] });
       const query = `
         query category($id: ID!) {
           category(id: $id) {
@@ -90,16 +93,21 @@ describe('CATEGORY INTERACTIONS', () => {
           }
         }
       `;
+      const products = await Products.find({ categoryId: category?.id });
       const response = await client.request(query, { id: category?.id });
       expect(response.category).toEqual({
         id: `${category?.id}`,
         name: category?.name,
-        products: [],
+        products: category?.products.map((prod) => ({
+          id: `${prod.id}`,
+          name: prod.name,
+        })),
       });
+      expect(response.category.products).toHaveLength(products.length);
     });
   });
 
-  test('should delete a category', async () => {
+  test('should delete a category and the products associated with it', async () => {
     const mutation = `
       mutation deleteCategory($id: ID!) {
         deleteCategory(id: $id) {
@@ -109,12 +117,15 @@ describe('CATEGORY INTERACTIONS', () => {
       }
     `;
     const category = await Categories.findOne(3);
+    await createProduct(category?.id);
     const response = await client.request(mutation, { id: 3 });
     expect(response.deleteCategory).toEqual({
       id: `${category?.id}`,
       name: category?.name,
     });
     const allCategories = await client.request(allCategoriesQuery);
+    const categoryProducts = await Products.find({ categoryId: category?.id });
     expect(allCategories.categories).toHaveLength(3);
+    expect(categoryProducts).toHaveLength(0);
   });
 });

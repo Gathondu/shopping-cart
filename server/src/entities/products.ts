@@ -33,6 +33,7 @@ export class Products extends BaseCollection {
     nullable: false,
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
+    cascade: true,
   })
   category!: Categories;
 }

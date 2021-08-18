@@ -32,7 +32,7 @@ describe('USER INTERACTIONS', () => {
     getConnection().close();
   });
 
-  test('should create user', async () => {
+  test('should create user and associated cart', async () => {
     const variables = {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
