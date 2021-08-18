@@ -191,5 +191,4 @@ export default {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-  testSequencer: './src/tests/utils/testSequencer.js',
 };

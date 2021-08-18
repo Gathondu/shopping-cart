@@ -1,8 +1,8 @@
 import { gql, GraphQLClient } from 'graphql-request';
 import faker from 'faker';
-import { Categories } from '../../entities/categories';
 
 const client = new GraphQLClient(`${process.env.URL}`);
+let count = 5;
 
 export const createUser = async (): Promise<void> => {
   const addUserMutation = gql`
@@ -13,12 +13,12 @@ export const createUser = async (): Promise<void> => {
     }
   `;
   await client.request(addUserMutation, {
-    firstName: faker.name.firstName,
-    lastName: faker.name.lastName,
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
   });
 };
 
-export const createCategory = async (name: string): Promise<void> => {
+export const createCategory = async (): Promise<void> => {
   const addCategoryMutation = gql`
     mutation AddCategory($name: String!) {
       createCategory(name: $name) {
@@ -26,10 +26,12 @@ export const createCategory = async (name: string): Promise<void> => {
       }
     }
   `;
-  await client.request(addCategoryMutation, { name });
+  await client.request(addCategoryMutation, { name: faker.commerce.product() });
 };
 
-export const createProduct = async (category: Categories): Promise<void> => {
+export const createProduct = async (
+  categoryId: number | undefined,
+): Promise<void> => {
   const addProductsMutation = gql`
     mutation CreateProduct(
       $name: String!
@@ -51,17 +53,16 @@ export const createProduct = async (category: Categories): Promise<void> => {
       }
     }
   `;
-  await client.request(addProductsMutation, {
-    name: faker.commerce.productName,
-    sku: faker.datatype.uuid,
-    price: faker.commerce.price,
+  const response = await client.request(addProductsMutation, {
+    name: faker.unique(faker.commerce.productName),
+    sku: faker.datatype.uuid(),
+    price: faker.commerce.price(),
     stockLevel: 20,
-    categoryId: category,
+    categoryId: categoryId,
   });
 
-  let count = 5;
   while (count > 0) {
     count -= 1;
-    createProduct(category);
+    await createProduct(categoryId);
   }
 };

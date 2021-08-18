@@ -61,8 +61,9 @@ export const DELETE_PRODUCT = {
   args: {
     id: { type: GraphQLID },
   },
-  async resolve(parent: product, { id }: any): Promise<void> {
+  async resolve(parent: product, { id }: any): Promise<Products> {
+    const product = getManager().findOneOrFail(Products, id);
     await getManager().delete(Products, id);
-    return;
+    return product;
   },
 };

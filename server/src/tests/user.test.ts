@@ -1,5 +1,6 @@
 import { gql, GraphQLClient } from 'graphql-request';
 import { createConnection, getConnection } from 'typeorm';
+import faker from 'faker';
 import { Users } from '../entities/users';
 
 describe('USER INTERACTIONS', () => {
@@ -33,8 +34,8 @@ describe('USER INTERACTIONS', () => {
 
   test('should create user', async () => {
     const variables = {
-      firstName: 'Test',
-      lastName: 'User',
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
     };
     const response = await client.request(addUserMutation, variables);
     expect(response.createUser).toEqual({ ...variables, id: '1', cartId: 1 });
@@ -55,13 +56,13 @@ describe('USER INTERACTIONS', () => {
     `;
     const variables = {
       id: `${user?.id}`,
-      firstName: 'updatedName',
-      lastName: 'updatedLastName',
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
     };
     await client.request(mutation, variables);
     const updatedUser = await Users.findOne(user?.id);
-    expect(updatedUser?.firstName).toEqual('updatedName');
-    expect(updatedUser?.lastName).toEqual('updatedLastName');
+    expect(updatedUser?.firstName).toEqual(variables.firstName);
+    expect(updatedUser?.lastName).toEqual(variables.lastName);
   });
 
   describe('should get', () => {
@@ -69,16 +70,16 @@ describe('USER INTERACTIONS', () => {
       await Promise.all(
         [
           {
-            firstName: 'test1',
-            lastName: 'user1',
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName(),
           },
           {
-            firstName: 'test2',
-            lastName: 'user2',
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName(),
           },
           {
-            firstName: 'test3',
-            lastName: 'user3',
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName(),
           },
         ].map(async (user) => await client.request(addUserMutation, user)),
       );
