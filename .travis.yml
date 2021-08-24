@@ -1,19 +1,21 @@
 language: node_js
 node_js:
-  - '12'
+  - "12"
 cache:
   - yarn
-  directories: - node_modules
+  - node_modules
 services:
   - mysql
 before_install:
   - cd server
+install:
+  - npm install -g typescript
+  - npm link typescript
+  - yarn install
 before_script:
   - mysql -u root -e 'CREATE DATABASE $DATABASE_NAME;'
   - mysql -u root -e "CREATE USER '$DATABASE_USERNAME'@'$DATABASE_HOST' IDENTIFIED BY '$DATABASE_PASSWORD';"
   - mysql -u root -e "GRANT ALL PRIVILEGES ON $DATABASE_NAME.* TO '$DATABASE_USERNAME'@'$DATABASE_HOST';"
-  - yarn install -g typescript
-  - yarn link typescript
-script:
   - yarn test-server &
+script:
   - yarn test
