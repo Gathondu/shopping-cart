@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - '12'
+cache:
+  directories: — node_modules
+install:
+  - yarn install
+before_script:
+  - yarn test-server &
+script:
+  - yarn test
+after_script:
+  - curl http://localhost:3001/close
