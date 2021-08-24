@@ -80,10 +80,12 @@ export const REMOVE_FROM_CART = {
 export const DELETE_CART = {
   type: CartType,
   args: {
-    id: { type: GraphQLID },
+    cartId: { type: GraphQLInt },
   },
-  async resolve(parent: cart, { id }: any): Promise<void> {
-    await getManager().delete(Carts, id);
+  async resolve(parent: cart, { cartId }: any): Promise<void> {
+    await getManager().delete(Carts, cartId);
+    const items = await getManager().find(CartItems, { where: { cartId } });
+    items.map(async (item) => await getManager().delete(CartItems, item.id));
     return;
   },
 };
@@ -94,19 +96,14 @@ export const DELETE_ITEM_FROM_CART = {
     cartId: { type: GraphQLInt },
     productId: { type: GraphQLInt },
   },
-  async resolve(
-    parent: cart,
-    { cartId, productId }: any,
-  ): Promise<CartItems[] | undefined> {
+  async resolve(parent: cart, { cartId, productId }: any): Promise<void> {
     const cartItem = await getManager().findOneOrFail(CartItems, {
       where: { cartId: cartId, productId: productId },
     });
     const prod = await getManager().findOneOrFail(Products, productId);
-    cartItem && prod ? prod.stockLevel + cartItem.count : false;
-    await getManager().delete(CartItems, cartItem.id);
+    cartItem && prod ? (prod.stockLevel += cartItem.count) : false;
     await getManager().save(prod);
-    return await getManager().find(CartItems, {
-      where: { cartId: cartId },
-    });
+    await getManager().delete(CartItems, cartItem.id);
+    return;
   },
 };

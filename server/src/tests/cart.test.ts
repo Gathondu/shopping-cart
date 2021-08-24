@@ -93,7 +93,59 @@ describe('CART AND CART ITEMS INTERACTIONS', () => {
     expect(product?.stockLevel).toEqual(18);
   });
 
-  // delete from cart and test that the product stock increases
-  // delete cart deletes all the cart items and test that the products stock increases
-  // deleting user deletes cart item and test that the product stock increases
+  test('should delete item completely from cart and test that the product stock increases', async () => {
+    const mutation = gql`
+      mutation DeleteItemFromCart($cartId: Int!, $productId: Int!) {
+        deleteItemFromCart(cartId: $cartId, productId: $productId) {
+          id
+        }
+      }
+    `;
+
+    await client.request(mutation, {
+      cartId: cart?.id,
+      productId: product?.id,
+    });
+    const cartItems = await getManager().find(CartItems, {
+      where: { cartId: cart?.id },
+    });
+    await product?.reload();
+    expect(cartItems).toHaveLength(0);
+    // the factory creates all the products with a default of 20 items
+    expect(product?.stockLevel).toEqual(20);
+  });
+
+  test('should deletes all the cart items and test that the products stock increases when cart is deleted', async () => {
+    const mutation = gql`
+      mutation DeleteCart($cartId: Int!) {
+        deleteCart(cartId: $cartId) {
+          id
+        }
+      }
+    `;
+
+    await client.request(mutation, {
+      cartId: cart?.id,
+    });
+    await product?.reload();
+    // the factory creates all the products with a default of 20 items
+    expect(product?.stockLevel).toEqual(20);
+  });
+
+  test('should delete user and deletes cart item and test that the product stock increases', async () => {
+    const mutation = gql`
+      mutation DeleteUser($id: ID!) {
+        deleteUser(id: $id) {
+          id
+        }
+      }
+    `;
+
+    await client.request(mutation, {
+      id: user?.id,
+    });
+    await product?.reload();
+    // the factory creates all the products with a default of 20 items
+    expect(product?.stockLevel).toEqual(20);
+  });
 });

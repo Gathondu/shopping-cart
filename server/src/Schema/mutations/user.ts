@@ -9,6 +9,7 @@ import { getManager } from 'typeorm';
 import { user, UserType } from '../types/user';
 import { Users } from '../../entities/users';
 import { Carts } from '../../entities/carts';
+import { CartItems } from '../../entities/cart_items';
 
 export const CREATE_USER = {
   type: UserType,
@@ -49,9 +50,13 @@ export const DELETE_USER = {
   args: {
     id: { type: GraphQLID },
   },
-  async resolve(parent: user, { id }: any): Promise<Users> {
-    const user = await getManager().findOneOrFail(Users, id);
+  async resolve(parent: user, { id }: any): Promise<void> {
+    const user = await getManager().findOne(Users, id);
+    const items = await getManager().find(CartItems, {
+      where: { cartId: user?.cartId },
+    });
+    items.map(async (item) => await getManager().delete(CartItems, item.id));
     await getManager().delete(Users, id);
-    return user;
+    return;
   },
 };
