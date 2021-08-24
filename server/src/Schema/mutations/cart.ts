@@ -10,17 +10,19 @@ import { cart, CartType } from '../types/cart';
 
 const manageCart = async (
   operation: string,
-  id: number,
+  cartId: number,
   productId: number,
   count?: number,
 ) => {
   const add = operation === 'add';
-  const shoppingCart = await getManager().findOneOrFail(Carts, id);
   const prod = await getManager().findOneOrFail(Products, productId);
-  const cartProd = shoppingCart.items?.find((x) => x.productId === productId);
-  if (!add && cartProd?.count == 1) {
+  const cartItems = await getManager().find(CartItems, {
+    where: { cartId: cartId },
+  });
+  const cartProd = cartItems.find((item) => item.productId === productId);
+  if (!add && cartProd?.count === 1) {
     // never allow item count below 1. To remove the item entirely use DELETE_ITEM_FROM_CART
-    return shoppingCart;
+    return cartItems;
   }
   if (cartProd && count) {
     add ? (cartProd.count += count) : (cartProd.count -= count);
@@ -29,47 +31,49 @@ const manageCart = async (
   } else {
     // ideally we should never get here if we are removing an item from cart
     const cartItem = new CartItems();
-    cartItem.cart = shoppingCart;
+    cartItem.cartId = cartId;
     cartItem.productId = productId;
     cartItem.count = count ? count : 1; // set from products and can add many to cart
-    cartItem.save();
+    await getManager().save(cartItem);
   }
   if (prod && count) {
     add ? (prod.stockLevel -= count) : (prod.stockLevel += count); // adjust the product stock level
   } else if (prod) {
     add ? prod.stockLevel-- : prod.stockLevel++;
   }
-  getManager().save(prod);
-  await getManager().save(shoppingCart);
-  return shoppingCart;
+  await getManager().save(prod);
+  if (cartProd) {
+    await getManager().save(cartProd);
+  }
+  return cartItems;
 };
 export const ADD_TO_CART = {
   type: CartType,
   args: {
-    id: { type: GraphQLID },
-    productId: { type: GraphQLID },
+    cartId: { type: GraphQLInt },
+    productId: { type: GraphQLInt },
     count: { type: GraphQLInt },
   },
   async resolve(
     parent: cart,
-    { id, productId, count }: any,
-  ): Promise<Carts | undefined> {
-    return manageCart('add', id, productId, count);
+    { cartId, productId, count }: any,
+  ): Promise<CartItems[] | undefined> {
+    return await manageCart('add', cartId, productId, count);
   },
 };
 
 export const REMOVE_FROM_CART = {
   type: CartType,
   args: {
-    id: { type: GraphQLID },
-    productId: { type: GraphQLID },
+    cartId: { type: GraphQLInt },
+    productId: { type: GraphQLInt },
     count: { type: GraphQLInt },
   },
   async resolve(
     parent: cart,
-    { id, productId, count }: any,
-  ): Promise<Carts | undefined> {
-    return manageCart('remove', id, productId, count);
+    { cartId, productId, count }: any,
+  ): Promise<CartItems[] | undefined> {
+    return await manageCart('remove', cartId, productId, count);
   },
 };
 
@@ -87,19 +91,22 @@ export const DELETE_CART = {
 export const DELETE_ITEM_FROM_CART = {
   type: CartType,
   args: {
-    id: { type: GraphQLID },
-    productId: { type: GraphQLID },
+    cartId: { type: GraphQLInt },
+    productId: { type: GraphQLInt },
   },
   async resolve(
     parent: cart,
-    { id, productId }: any,
-  ): Promise<Carts | undefined> {
-    const shoppingCart = await getManager().findOneOrFail(Carts, id);
-    const item = shoppingCart.items.find((x) => x.productId === productId);
+    { cartId, productId }: any,
+  ): Promise<CartItems[] | undefined> {
+    const cartItem = await getManager().findOneOrFail(CartItems, {
+      where: { cartId: cartId, productId: productId },
+    });
     const prod = await getManager().findOneOrFail(Products, productId);
-    item && prod ? prod.stockLevel + item.count : false;
-    await getManager().delete(CartItems, item?.id);
-    getManager().save(prod);
-    return getManager().save(shoppingCart);
+    cartItem && prod ? prod.stockLevel + cartItem.count : false;
+    await getManager().delete(CartItems, cartItem.id);
+    await getManager().save(prod);
+    return await getManager().find(CartItems, {
+      where: { cartId: cartId },
+    });
   },
 };

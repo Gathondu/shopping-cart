@@ -2,9 +2,8 @@
  * table in the database via migration files.
  */
 
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import BaseCollection from './base_entity';
-import { Carts } from './carts';
 
 @Entity()
 export class CartItems extends BaseCollection {
@@ -14,10 +13,6 @@ export class CartItems extends BaseCollection {
   @Column()
   count!: number;
 
-  @ManyToOne(() => Carts, (cart) => cart.items, {
-    nullable: false,
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  cart!: Carts;
+  @Column({ name: 'cart_id' })
+  cartId!: number;
 }

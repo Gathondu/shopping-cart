@@ -13,8 +13,6 @@ export const GET_USER_CART = {
     id: { type: GraphQLID },
   },
   async resolve(parent: cart, { id }: any): Promise<Carts> {
-    return await getManager().findOneOrFail(Carts, id, {
-      relations: ['items'],
-    });
+    return await getManager().findOneOrFail(Carts, id);
   },
 };

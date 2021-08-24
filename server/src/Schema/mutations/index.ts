@@ -20,7 +20,7 @@ const updateMutations = {
   updateProduct: UPDATE_PRODUCT,
   updateUser: UPDATE_USER,
   addItemToCart: ADD_TO_CART,
-  removeFromCart: REMOVE_FROM_CART,
+  removeItemFromCart: REMOVE_FROM_CART,
 };
 
 const deleteMutations = {

@@ -53,7 +53,7 @@ export const createProduct = async (
       }
     }
   `;
-  const response = await client.request(addProductsMutation, {
+  await client.request(addProductsMutation, {
     name: faker.unique(faker.commerce.productName),
     sku: faker.datatype.uuid(),
     price: faker.commerce.price(),
